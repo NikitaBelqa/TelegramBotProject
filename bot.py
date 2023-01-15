@@ -1,8 +1,8 @@
 import telebot
 from telebot import *
 import config
-import PIL
 from PIL import Image
+import os
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -21,10 +21,12 @@ def Welcome(message):
 images = dict()
 @bot.message_handler(content_types=['photo']) #присылается ЛЮБОЕ фото
 def Photo(message):
+
     print(message.photo[:-2])
     images[str(message.chat.id)] = []
     try:
         file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
+
         downloaded_file = bot.download_file(file_info.file_path)
 
         src = 'photosforproject/' + file_info.file_path
@@ -32,23 +34,25 @@ def Photo(message):
         with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
 
-        bot.reply_to(message, "Пожалуй, я сохраню это")
+        bot.reply_to(message, "Это работает")
         images[str(message.chat.id)].append(src)
+
+
 
     except Exception as e:
         bot.reply_to(message, e)
 
-    #img = Image.open(downloaded_file)
-    #width, height = img.size
-    #print("Начальные размеры картинки -", img.size)
+    img = Image.open(downloaded_file)
+    width, height = img.size
+    print("Начальные размеры картинки -", img.size)
 
-    #k = float(width/512)
-    #new_width = int(width/k)
-    #new_height = int(height/k)
+    k = float(width/512)
+    new_width = int(width/k)
+    new_height = int(height/k)
 
-    #new_image = img.resize((new_width, new_height))
-    #print("Конечные размеры картинки -", new_image.size)
-    #bot.send_photo(message.chat.id, new_image)
+    new_image = img.resize((new_width, new_height))
+    print("Конечные размеры картинки -", new_image.size)
+    bot.send_photo(message.chat.id, new_image)
     
 
 
