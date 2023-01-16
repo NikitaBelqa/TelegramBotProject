@@ -1,5 +1,5 @@
 import telebot
-from telebot import *
+from telebot import types
 import config
 from PIL import Image
 import os
@@ -18,7 +18,7 @@ def Welcome(message):
     welcome_text = "Добро пожаловать, {0.first_name}!\nЯ - <b>{1.first_name}</b>, бот созданный, чтобы подготовить любую Вашу фоторграфию для стикеров. \nПросто пришлите мне НЕ СЖАТОЕ фото (в виде файла), и я верну вам его в нужном формате и размерах для стикера. "
     bot.send_message(message.chat.id, welcome_text.format(message.from_user, bot.get_me()), parse_mode='html')
 
-images = dict()
+images = list()
 @bot.message_handler(content_types=['photo']) #присылается ЛЮБОЕ фото
 def Photo(message):
 
